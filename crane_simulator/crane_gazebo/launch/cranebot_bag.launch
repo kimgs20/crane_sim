@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <param name="robot_description"
+  command="$(find xacro)/xacro --inorder '$(find crane_description)/urdf/cranebot.urdf.xacro'"/>
+
+  <node name="visualizer" pkg="rviz" type="rviz"/>
+  <node pkg="rosbag" type="play" name="rosbagplay"
+    args="$(find crane_gazebo)/bagfiles/crane.bag" output="screen"/>
+
+</launch>

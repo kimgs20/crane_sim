@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find crane_gazebo)/models"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find crane_gazebo)/models"/>
+
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find crane_gazebo)/worlds/house_tree.world"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <include file="$(find crane_control)/launch/cranebot_control.launch">
+  </include>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find crane_description)/urdf/cranebot.urdf.xacro'"/>
+
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+    <param name="frame_id" type="string" value="world"/>
+    <param name="resolution" value="0.5"/> <!--0.2-->
+    <param name="sensor_model/max_range" value="100"/> <!--100 meter-->
+    <param name="sensor_model/hit" value="0.7"/>
+    <param name="sensor_model/miss" value="0.4"/>
+    <param name="sensor_model/min" value="0.12"/>
+    <param name="sensor_model/max" value="0.97"/>
+    <param name="pointcloud_min_z" value="0.0"/>
+    <!-- data source to integrate (PointCloud2) -->
+    <remap from="cloud_in" to="velodyne_points"/>
+  </node>
+
+  <!-- <include file="$(find flight_space_mapping)/launch/abstract_map_v2.launch"/> -->
+  <node pkg="cluster" name="euclidean_cluster" type="euclidean_cluster">
+    <param name="kd_min_size" value="150"/>
+    <param name="kd_max_size" value="25000"/>
+    <param name="kd_tolerance" value="1.2"/>
+  </node>
+
+  <node pkg="cluster" name="abstract_map_v2" type="abstract_map_v2" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model cranebot -param robot_description"/>
+
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/>
+  <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+    <remap from="/joint_states" to="/cranebot/joint_states" />
+  </node>
+  <node name="visualizer" pkg="rviz" type="rviz"/>
+
+</launch>

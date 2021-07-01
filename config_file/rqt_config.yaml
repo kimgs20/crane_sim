@@ -1,0 +1,13 @@
+publish_interval: 100
+settings:
+  /cranebot/azimuth/command/data: {is_repeat: false, max: 3.1, min: -3.1}
+  /cranebot/elevation/command/data: {is_repeat: false, max: 1.5, min: 0.0}
+  /cranebot/lidar_velocity/command/data: {is_repeat: false, max: 2.0, min: -2.0}
+  /cranebot/load_position/command/data: {is_repeat: false, max: 0.0, min: -60.0}
+  /cranebot/prismatic1/command/data: {is_repeat: false, max: 15.0, min: 0.0}
+  /cranebot/prismatic2/command/data: {is_repeat: false, max: 15.0, min: 0.0}
+  /cranebot/prismatic3/command/data: {is_repeat: false, max: 15.0, min: 0.0}
+  /cranebot/prismatic4/command/data: {is_repeat: false, max: 15.0, min: 0.0}
+texts: [/cranebot/azimuth/command/data, /cranebot/elevation/command/data, /cranebot/prismatic4/command/data,
+  /cranebot/prismatic3/command/data, /cranebot/prismatic2/command/data, /cranebot/prismatic1/command/data,
+  /cranebot/lidar_velocity/command/data, /cranebot/load_position/command/data]

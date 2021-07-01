@@ -1,0 +1,44 @@
+cranebot:
+  # default : p: 100.0, i: 0.01, d: 10.0
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+  
+  # Position Controllers ---------------------------------------
+  azimuth:
+    type: effort_controllers/JointPositionController
+    joint: azimuth
+    pid: {p: 50000.0, i: 0.01, d: 4000.0}
+  elevation:
+    type: effort_controllers/JointPositionController
+    joint: elevation
+    pid: {p: 50000.0, i: 0.01, d: 4000.0}
+  prismatic1:
+    type: effort_controllers/JointPositionController
+    joint: prj1
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  prismatic2:
+    type: effort_controllers/JointPositionController
+    joint: prj2
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  prismatic3:
+    type: effort_controllers/JointPositionController
+    joint: prj3
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  prismatic4:
+    type: effort_controllers/JointPositionController
+    joint: prj4
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  # Velocity Controller
+  lidar_velocity:
+    type: effort_controllers/JointVelocityController
+    joint: lidar_joint
+    pid: {p: 10.0, i: 0.0, d: 1.0}
+
+ # Position Controllers ---------------------------------------
+  load_position:
+    type: effort_controllers/JointPositionController
+    joint: cable
+    pid: {p: 10.0, i: 0.01, d: 1.0} 

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="flight_space_mapping" name="euclidean_cluster" type="euclidean_cluster">
+    <param name="ransac_distance_threashold" value="0.02"/>
+    <param name="kd_min_size" value="150"/>
+    <param name="kd_max_size" value="25000"/>
+    <param name="kd_tolerance" value="1.2"/>
+  </node>
+
+  <node pkg="flight_space_mapping" name="abstract_map_v2" type="abstract_map_v2" />
+
+</launch>
